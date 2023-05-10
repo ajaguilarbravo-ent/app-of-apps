@@ -1,0 +1,62 @@
+{{- range .Values.clusters }}
+{{- $cluster := . -}}
+{{- if $cluster.genericApps }}
+{{- range $cluster.genericApps }}
+{{- $app := . }}
+---
+{{- $merged := mergeOverwrite (dict "Template" $.Template) $cluster }}
+{{- $releaseName := $app.releaseName | default $app.chart }}
+
+{{- $appName := printf "%s-%s" $releaseName $cluster.name }}
+{{- if $app.name }}
+{{- $appName = $app.name }}
+# DEBUG: explicitly overridden application name
+{{- else }}
+# DEBUG: using release name + cluster name as application name
+{{- end }}
+
+{{- $appNameLen := len $appName }}
+{{- if gt $appNameLen 63 }}
+{{ fail (printf "Application name %s too long (>63)" $appName) }}
+{{- end }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ tpl $appName $merged }}
+  namespace: argocd
+  labels:
+    stage: {{ default $cluster.stage $app.stage }}
+    region: {{ $cluster.region }}
+    chart: {{ $app.chart }}
+    cluster: {{ $cluster.name | trimPrefix "pre-" | trimPrefix "pro-" }}
+    project-id: {{ $cluster.projectId }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: {{ tpl (default (default "default" $cluster.namespace) $app.namespace) $merged }}
+    server: {{ $cluster.server }}
+  project: {{ default $cluster.argoProject $app.argoProject }}
+{{- if $app.syncPolicy }}
+  syncPolicy: {{ toYaml $app.syncPolicy | nindent 4 }}
+{{- end }}
+  source:
+    chart: {{ $app.chart }}
+    {{- if $app.repoURL }}
+    repoURL: {{ $app.repoURL }}
+    {{- else }}
+    repoURL: https://argocd.20.103.115.121.nip.io/{{ $app.chart }}
+    {{- end }}
+    targetRevision: {{ $app.targetRevision | default ">0.0.0" | quote }}
+    helm:
+      releaseName: {{ tpl $releaseName $merged }}
+      {{- if $app.valueFiles }}
+      {{- /* we use tpl here to allow to use placeholders in the values.yaml, e.g. values-{{ .region }}.yaml */}}
+      valueFiles: {{ tpl (toYaml $app.valueFiles) $merged | nindent 8 }}
+      {{- end }}
+      {{- if $app.values }}
+      values: {{ tpl (toYaml $app.values) $merged | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

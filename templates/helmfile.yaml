@@ -1,0 +1,43 @@
+{{- range .Values.clusters }}
+{{- $cluster := . }}
+{{- if $cluster.helmfiles }}
+{{- range $cluster.helmfiles }}
+{{- $app := . }}
+{{- $merged := mergeOverwrite (dict "Template" $.Template) $cluster }}
+{{- $releaseName := $app.releaseName | default $app.helmfile }}
+{{- $appName := printf "%s-%s" $releaseName $cluster.name }}
+{{- $appNameLen := len $appName }}
+{{- if gt $appNameLen 63 }}
+{{ fail (printf "Application name %s too long (>63)" $appName) }}
+{{- end }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $appName }}
+  namespace: argocd
+  labels:
+    stage: {{ $cluster.stage }}
+    region: {{ $cluster.region }}
+    helmfile: {{ $app.helmfile }}
+    cluster: {{ $cluster.name }}
+    project-id: {{ $cluster.projectId }}
+spec:
+  destination:
+    server: {{ $cluster.server }}
+  project: {{ default $cluster.argoProject $app.argoProject }}
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly={{ $app.ApplyOutOfSyncOnly | default true }}
+  source:
+    plugin:
+      name: helmfile
+      env:
+        - name: HELMFILE_GLOBAL_OPTIONS
+          value: "--environment {{ $app.environment }}"
+    repoURL: https://github.es.ecg.tools/eBay-Kleinanzeigen/{{ $app.helmfile }}
+    targetRevision: {{ $app.targetRevision | default "master" | quote }}
+    path: .
+{{- end }}
+{{- end }}
+{{- end }}

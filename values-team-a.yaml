@@ -1,0 +1,18 @@
+projects:
+  - team-a
+
+clusters:
+  - server:      https://aks-41psjrck.hcp.westeurope.azmk8s.io
+    name:        aks-41psjrck
+    projectId:   team-a
+    region:      westeurope
+    argoProject: team-a
+    stage:       staging
+
+    genericApps:
+
+      - chart: app01-team-a
+        namespace: team-a
+        valueFiles:
+          - values.yaml
+

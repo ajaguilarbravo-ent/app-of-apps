@@ -1,0 +1,19 @@
+projects:
+  - team-b
+
+clusters:
+  - server:      https://aks-41psjrck.hcp.westeurope.azmk8s.io
+    name:        aks-41psjrck
+    projectId:   team-b
+    region:      westeurope
+    argoProject: team-b
+    stage:       staging
+
+    genericApps:
+
+      - chart: app01-teamb
+        namespace: lab
+        valueFiles:
+          - values.yaml
+
+

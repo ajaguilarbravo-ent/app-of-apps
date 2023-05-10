@@ -1,0 +1,33 @@
+projects:
+  - lab
+
+clusters:
+  - server:      https://aks-41psjrck.hcp.westeurope.azmk8s.io
+    name:        aks-41psjrck
+    projectId:   lab
+    region:      westeurope
+    argoProject: lab
+    stage:       staging
+
+    genericApps:
+
+      - chart: app01
+        namespace: lab
+        valueFiles:
+          - values.yaml
+
+      - chart: app03
+        namespace: lab
+        valueFiles:
+          - values.yaml
+
+      - chart: app02
+        namespace: lab
+        valueFiles:
+          - values.yaml
+
+      - chart: app04
+        namespace: lab
+        valueFiles:
+          - values.yaml
+

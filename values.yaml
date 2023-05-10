@@ -2,7 +2,7 @@ projects:
   - lab
 
 clusters:
-  - server:      https://aks-41psjrck.hcp.westeurope.azmk8s.io
+  - server:      https://kubernetes.default.svc
     name:        aks-41psjrck
     projectId:   lab
     region:      westeurope

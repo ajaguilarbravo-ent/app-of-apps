@@ -45,7 +45,7 @@ spec:
     {{- if $app.repoURL }}
     repoURL: {{ $app.repoURL }}
     {{- else }}
-    repoURL: https://argocd.20.103.115.121.nip.io/{{ $app.chart }}
+    repoURL: https://argocd.20.103.115.121.nip.io
     {{- end }}
     targetRevision: {{ $app.targetRevision | default ">0.0.0" | quote }}
     helm:

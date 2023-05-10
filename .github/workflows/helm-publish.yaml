@@ -12,7 +12,7 @@ env:
   CHART_ROOT_FOLDER: .
 
 jobs:
-  build-push:
+  helm-publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read

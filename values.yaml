@@ -11,23 +11,18 @@ clusters:
 
     genericApps:
 
-      - chart: app01
+      - chart: betisapp
         namespace: lab
         valueFiles:
           - values.yaml
 
-      - chart: app03
+      - chart: kuard
         namespace: lab
         valueFiles:
           - values.yaml
 
-      - chart: app02
-        namespace: lab
-        valueFiles:
-          - values.yaml
-
-      - chart: app04
-        namespace: lab
-        valueFiles:
-          - values.yaml
+      # - chart: podinfo
+      #   namespace: lab
+      #   valueFiles:
+      #     - values.yaml
 

@@ -1,9 +1,9 @@
 projects:
-  - lab
+  - default
 
 clusters:
   - server:      https://kubernetes.default.svc
-    name:        aks-41psjrck
+    name:        aks-lab
     projectId:   lab
     region:      westeurope
     argoProject: lab

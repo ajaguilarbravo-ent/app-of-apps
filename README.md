@@ -80,7 +80,7 @@ spec:
   project: default
   source:
     chart: app-of-apps
-    repoURL: https://chart.20.103.115.121.nip.io/app-of-apps
+    repoURL: https://chart.20.103.115.121.nip.io
     targetRevision: '>0.0.0'
 EOF
 ```

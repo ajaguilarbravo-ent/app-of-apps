@@ -10,7 +10,7 @@ clusters:
 
     genericApps:
 
-      - chart: betisapp
+      - chart: betisapp17
         namespace: lab
         valueFiles:
           - values.yaml

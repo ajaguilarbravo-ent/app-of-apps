@@ -26,11 +26,12 @@ clusters:
           syncOptions:
           - CreateNamespace=true        
 
-      # - chart: podinfo
-      #   namespace: lab
-      #   valueFiles:
-      #     - values.yaml
-      #   syncPolicy:
-      #     syncOptions:
-      #     - CreateNamespace=true        
+      - chart: podinfo
+        namespace: lab
+        valueFiles:
+          - values.yaml
+        syncPolicy:
+          syncOptions:
+          - CreateNamespace=true
+
 

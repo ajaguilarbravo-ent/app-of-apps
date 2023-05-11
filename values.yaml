@@ -1,12 +1,11 @@
-projects:
-  - lab
+projects: []
 
 clusters:
   - server:      https://kubernetes.default.svc
     name:        aks-lab
-    projectId:   lab
+    projectId:   default
     region:      westeurope
-    argoProject: lab
+    argoProject: default
     stage:       staging
 
     genericApps:
@@ -15,14 +14,23 @@ clusters:
         namespace: lab
         valueFiles:
           - values.yaml
+        syncPolicy:
+          syncOptions:
+          - CreateNamespace=true        
 
       - chart: kuard
         namespace: lab
         valueFiles:
           - values.yaml
+        syncPolicy:
+          syncOptions:
+          - CreateNamespace=true        
 
       # - chart: podinfo
       #   namespace: lab
       #   valueFiles:
       #     - values.yaml
+      #   syncPolicy:
+      #     syncOptions:
+      #     - CreateNamespace=true        
 
